@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4161B0B32C7E8090008FB8D4 /* CGFloat + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4161B0B22C7E8090008FB8D4 /* CGFloat + Ext.swift */; };
+		4161B0B52C7E81B6008FB8D4 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4161B0B42C7E81B6008FB8D4 /* MovieCollectionViewCell.swift */; };
+		4161B0B72C7E8464008FB8D4 /* HeroHeadUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4161B0B62C7E8464008FB8D4 /* HeroHeadUIView.swift */; };
 		418836812C7E0E7D008F37A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418836802C7E0E7D008F37A9 /* AppDelegate.swift */; };
 		418836832C7E0E7D008F37A9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418836822C7E0E7D008F37A9 /* SceneDelegate.swift */; };
 		418836852C7E0E7D008F37A9 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418836842C7E0E7D008F37A9 /* MainTabBarViewController.swift */; };
@@ -41,6 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4161B0B22C7E8090008FB8D4 /* CGFloat + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat + Ext.swift"; sourceTree = "<group>"; };
+		4161B0B42C7E81B6008FB8D4 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		4161B0B62C7E8464008FB8D4 /* HeroHeadUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroHeadUIView.swift; sourceTree = "<group>"; };
 		4188367D2C7E0E7D008F37A9 /* MoviesApp-MVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MoviesApp-MVVM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		418836802C7E0E7D008F37A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		418836822C7E0E7D008F37A9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +92,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4161B0B12C7E8076008FB8D4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4161B0B22C7E8090008FB8D4 /* CGFloat + Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		418836742C7E0E7D008F37A9 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +123,7 @@
 		4188367F2C7E0E7D008F37A9 /* MoviesApp-MVVM */ = {
 			isa = PBXGroup;
 			children = (
+				4161B0B12C7E8076008FB8D4 /* Extensions */,
 				418836C02C7E155E008F37A9 /* Managers */,
 				418836B42C7E1055008F37A9 /* Resources */,
 				418836B32C7E1053008F37A9 /* Models */,
@@ -156,7 +171,9 @@
 		418836B12C7E104E008F37A9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4161B0B42C7E81B6008FB8D4 /* MovieCollectionViewCell.swift */,
 				418836C12C7E1582008F37A9 /* CollectionViewTableViewCell.swift */,
+				4161B0B62C7E8464008FB8D4 /* HeroHeadUIView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -330,7 +347,10 @@
 				418836C22C7E1582008F37A9 /* CollectionViewTableViewCell.swift in Sources */,
 				418836852C7E0E7D008F37A9 /* MainTabBarViewController.swift in Sources */,
 				418836812C7E0E7D008F37A9 /* AppDelegate.swift in Sources */,
+				4161B0B32C7E8090008FB8D4 /* CGFloat + Ext.swift in Sources */,
+				4161B0B72C7E8464008FB8D4 /* HeroHeadUIView.swift in Sources */,
 				418836B62C7E106F008F37A9 /* DownloadsViewController.swift in Sources */,
+				4161B0B52C7E81B6008FB8D4 /* MovieCollectionViewCell.swift in Sources */,
 				418836BC2C7E10C3008F37A9 /* HomeViewController.swift in Sources */,
 				418836832C7E0E7D008F37A9 /* SceneDelegate.swift in Sources */,
 			);
