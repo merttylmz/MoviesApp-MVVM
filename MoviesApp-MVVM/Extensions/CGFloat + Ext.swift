@@ -14,7 +14,7 @@ extension UIViewController {
     var screenHeight: CGFloat {
         return view.frame.size.height
     }
-    var fontSize: CGFloat {
+    var titleFontSize: CGFloat {
         return view.frame.size.height * 0.019
     }
 }
@@ -25,7 +25,7 @@ extension UIView {
     var screenHeight: CGFloat {
         return UIScreen.main.bounds.height
     }
-    var fontSize: CGFloat {
+    var titleFontSize: CGFloat {
         return UIScreen.main.bounds.height * 0.019
     }
     
