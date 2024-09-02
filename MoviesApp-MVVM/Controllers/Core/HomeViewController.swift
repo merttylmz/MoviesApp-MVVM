@@ -8,6 +8,16 @@
 import UIKit
 import SnapKit
 
+enum Sections: Int {
+    case TrendingMovies = 0
+    case Popular = 1
+    case TrendingTv = 2
+    case Upcoming = 3
+    case topRated = 4
+}
+
+
+
 class HomeViewController: UIViewController {
     
     // MARK: - Properties
@@ -16,20 +26,19 @@ class HomeViewController: UIViewController {
     
     let sectionTitles = ["Trending Movies","Populer","Trending TV", "Upcoming Movies", "Top Rated"]
     
-// MARK: - LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .darkGray
-        
-        setupUI()
+        setupHomeUI()
         configureNavigationBar()
-        getTrendingMovies()
+        
     }
     
     
     // MARK: - Helpers
-    func setupUI(){
+    private func setupHomeUI(){
+        view.backgroundColor = .systemBackground
         homeFeedTable.delegate = self
         homeFeedTable.dataSource = self
         homeFeedTable.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
@@ -41,8 +50,8 @@ class HomeViewController: UIViewController {
         let headerView = HeroHeadUIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight * 0.37))
         homeFeedTable.tableHeaderView = headerView
     }
-
-    func configureNavigationBar(){
+    
+    private func configureNavigationBar(){
         
         lazy var image = UIImage(systemName: "sparkles.tv")
         
@@ -55,13 +64,7 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .systemRed
     }
     
-    private func getTrendingMovies(){
-        APICaller.shared.fetchData(from: .upcomingMovies) { _ in
-            //
-        }
-    }
-   
-    
+
 
 }
     // MARK: - Extension and Functions
@@ -76,7 +79,59 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else { 
+            return UITableViewCell()
+        }
+        
+        switch indexPath.section {
+        case Sections.TrendingMovies.rawValue:
+            APICaller.shared.getTrendingMovies { result in
+                switch result {
+                case .success(let titles):
+                    cell.configure(with: titles)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        case Sections.TrendingTv.rawValue:
+            APICaller.shared.getTrendingTVs { result in
+                switch result {
+                case .success(let titles):
+                    cell.configure(with: titles)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        case Sections.Popular.rawValue:
+            APICaller.shared.getPopular { result in
+                switch result {
+                case .success(let titles):
+                    cell.configure(with: titles)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        case Sections.Upcoming.rawValue:
+            APICaller.shared.getUpcomingMovies { result in
+                switch result {
+                case .success(let titles):
+                    cell.configure(with: titles)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        case Sections.topRated.rawValue:
+            APICaller.shared.getTopRated { result in
+                switch result {
+                case .success(let titles):
+                    cell.configure(with: titles)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        default:
+            return UITableViewCell()
+        }
         return cell
     }
         
@@ -95,12 +150,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitles[section]
     }
+    
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let header = view as? UITableViewHeaderFooterView else {return}
         header.textLabel?.font = .systemFont(ofSize: titleFontSize, weight: .semibold)
         header.textLabel?.frame = CGRect(x: 11, y: 11, width: 100, height: 200)
         header.textLabel?.textColor = .lightGray
-        header.textLabel?.text = header.textLabel?.text?.capitalizeFirstLetter()
+        header.textLabel?.text = header.textLabel?.text?.uppercased()
     }
      
 }

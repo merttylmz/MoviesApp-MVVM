@@ -41,8 +41,7 @@ class APICaller {
             
             do{
                 let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
-                //completion(.success(results.results))
-                print(results.results[1].original_title)
+                completion(.success(results.results))
             }catch{
                 completion(.failure(APIError.failedGetData))
             }
@@ -70,4 +69,22 @@ class APICaller {
         fetchData(from: .topRatedMovies, completion: completion)
     }
 
+    func getDiscoverMovies(completion: @escaping (Result<[Title],Error>) -> Void) {
+        
+        guard let url = URL(string: "\(Constant.baseURL)/3/discover/movie?api_key=\(Constant.API_KEY)&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate") else {return}
+                
+        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
+            guard let data = data, error == nil else { return }
+            
+            do{
+                let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+                completion(.success(results.results))
+            }catch{
+                completion(.failure(APIError.failedGetData))
+            }
+        }
+        task.resume()
+    }
 }
+
+//  https://api.themoviedb.org/3/discover/movie?api_key=\b3d14fe0033bac282efa8e8652e9c0a9&sort_by=popularity.desc&page=1&with_watch_monetization_types=flatrat

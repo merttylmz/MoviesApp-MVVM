@@ -47,6 +47,7 @@ class HeroHeadUIView: UIView {
         gradientLayer.frame = bounds
         layer.addSublayer(gradientLayer)
     }
+    
     func setupButton(){
         lazy var playButton = UIButton()
         playButton.setTitle("Play", for: .normal)
