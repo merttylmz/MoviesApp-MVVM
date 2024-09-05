@@ -10,7 +10,7 @@ import SnapKit
 
 class SearchResultViewController: UIViewController {
 
-    private var titles: [Title] = [Title]()
+    public var titles: [Title] = [Title]()
     
     
     
@@ -70,16 +70,16 @@ class SearchResultViewController: UIViewController {
 
 extension SearchResultViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 11
+        return titles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as? TitleCollectionViewCell else {
-            print("else girdi")
             return UICollectionViewCell()
         }
-        cell.backgroundColor = .blue
+        let title = titles[indexPath.row]
+        cell.configure(with: title.poster_path ?? "")
         return cell
     }
     

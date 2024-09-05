@@ -7,9 +7,17 @@
 
 import UIKit
 
-class CollectionViewTableViewCell: UITableViewCell {
+protocol CollectionViewTableViewCellDelegate: AnyObject {
+    func CollectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel)
+}
 
+
+
+class CollectionViewTableViewCell: UITableViewCell {
+    
     static let identifier = "CollectionViewTableViewCell"
+    
+    weak var delegate: CollectionViewTableViewCellDelegate?
     
     private var titles: [Title] = [Title]()
     
@@ -36,7 +44,7 @@ class CollectionViewTableViewCell: UITableViewCell {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
-
+        
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -47,7 +55,7 @@ class CollectionViewTableViewCell: UITableViewCell {
             make.left.equalTo(contentView.snp.left)
             make.right.equalTo(contentView.snp.right)
             make.bottom.equalTo(contentView.snp.bottom)
-
+            
         }
     }
     
@@ -83,4 +91,36 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
         return titles.count
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let title = titles[indexPath.row]
+        
+        guard let titleName = title.original_title ?? title.original_name else {return}
+        
+        APICaller.shared.getMovie(with: titleName + "trailer") { [weak self] result in
+            
+            switch result {
+                
+            case .success(let videoId):
+                guard let videoId = videoId else {return}
+                
+                let title = self?.titles[indexPath.row]
+                
+                guard let titleOverview = title?.overview else {return}
+                
+                guard let strongSelf = self else {return}
+                
+                let viewModel = TitlePreviewViewModel(title: title?.original_title ?? titleName , youtubeView: String(videoId), titleOverview: titleOverview)
+                
+                self?.delegate?.CollectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+            
+            
+        }
+    }
 }
