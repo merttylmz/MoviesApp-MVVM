@@ -104,9 +104,41 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let title = titles[indexPath.row]
+        
+        guard let titleName = title.original_title ?? title.original_name else {return}
+        
+        APICaller.shared.getMovie(with: titleName) { result in
+            
+            
+            switch result {
+            case .success(let videoId):
+                
+                DispatchQueue.main.async {
+                    
+                    guard let videoId = videoId else {return}
+                    
+                    let vc = TitlePreviewViewController()
+                    
+                    vc.configure(with: TitlePreviewViewModel(title: titleName, youtubeView: String(videoId), titleOverview: title.overview ?? ""))
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchViewController: UISearchResultsUpdating, SearchResultViewControllerDelegate {
+    
+    
     
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -116,6 +148,7 @@ extension SearchViewController: UISearchResultsUpdating {
               !query.trimmingCharacters(in: .whitespaces).isEmpty,
               query.trimmingCharacters(in: .whitespaces).count >= 3,
               let resultsController = searchController.searchResultsController as? SearchResultViewController else {return}
+        resultsController.delegate = self
         
         APICaller.shared.searchMovies(with: query) { result in
             DispatchQueue.main.async {
@@ -131,5 +164,15 @@ extension SearchViewController: UISearchResultsUpdating {
 
     }
     
-    
+    func SearchResultViewControllerDidTappedItem(_ viewModel: TitlePreviewViewModel) {
+        
+        DispatchQueue.main.async { [weak self] in
+            
+            let vc = TitlePreviewViewController()
+            vc.configure(with: viewModel)
+            
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
 }

@@ -64,14 +64,14 @@ class TitleTableViewCell: UITableViewCell {
         titlePosterImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(5)
             make.bottom.equalTo(contentView).offset(-5)
-            make.width.equalTo(120)
+            make.width.equalTo(screenWidth * 0.31)
             make.left.equalTo(contentView).offset(5)
         }
         
         // Label - Constraints
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(titlePosterImageView.snp.right).offset(30)
+            make.left.equalTo(titlePosterImageView.snp.right).offset(screenWidth / 13)
             make.centerY.equalTo(contentView)
             make.right.lessThanOrEqualTo(contentView).offset(-15)
         }

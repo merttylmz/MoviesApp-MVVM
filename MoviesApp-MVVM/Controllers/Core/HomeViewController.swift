@@ -26,13 +26,16 @@ class HomeViewController: UIViewController {
     
     let sectionTitles = ["Trending Movies","Populer","Trending TV", "Upcoming Movies", "Top Rated"]
     
+    private var randomTrendingMovie: Title?
+    private var headerView: HeroHeadUIView?
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupHomeUI()
         configureNavigationBar()
-        
+        configureHeroHeaderView()
     }
     
     
@@ -50,7 +53,7 @@ class HomeViewController: UIViewController {
         setupHeaderView()
     }
     private func setupHeaderView(){
-        let headerView = HeroHeadUIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight * 0.37))
+        headerView = HeroHeadUIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight * 0.5))
         homeFeedTable.tableHeaderView = headerView
     }
     
@@ -68,6 +71,18 @@ class HomeViewController: UIViewController {
     }
     
 
+    private func configureHeroHeaderView() {
+        APICaller.shared.getTrendingMovies { [weak self] result in
+            switch result {
+            case .success(let titles):
+                let selectedTitle = titles.randomElement()
+                self?.randomTrendingMovie = titles.randomElement()
+                self?.headerView?.configure(with: TitleViewModel(titleName: selectedTitle?.original_title ?? "", posterURL: selectedTitle?.poster_path ?? ""))
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 
 }
     // MARK: - Extension and Functions
@@ -172,7 +187,13 @@ extension HomeViewController: CollectionViewTableViewCellDelegate {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
             vc.configure(with: viewModel)
+            //vc.hidesBottomBarWhenPushed = false
+            //vc.modalPresentationStyle = .fullScreen
+            //vc.modalTransitionStyle = .coverVertical
             self?.navigationController?.pushViewController(vc, animated: true)
+            //self?.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+
+
         }
         
     }

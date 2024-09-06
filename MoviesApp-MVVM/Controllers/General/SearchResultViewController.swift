@@ -8,11 +8,15 @@
 import UIKit
 import SnapKit
 
+protocol SearchResultViewControllerDelegate: AnyObject {
+    func SearchResultViewControllerDidTappedItem(_ viewModel: TitlePreviewViewModel)
+}
+
 class SearchResultViewController: UIViewController {
 
     public var titles: [Title] = [Title]()
     
-    
+    public weak var delegate: SearchResultViewControllerDelegate?
     
     // MARK: - Properties
     lazy var searchResultCollectionView =  UICollectionView()
@@ -83,5 +87,28 @@ extension SearchResultViewController: UICollectionViewDelegate, UICollectionView
         return cell
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let title = titles[indexPath.row]
+        let titleName = title.original_title ?? ""
+        
+        APICaller.shared.getMovie(with: titleName) { [weak self]result in
+            
+            
+            switch result {
+            case .success(let videoId):
+                
+                    guard let videoId = videoId else {return}
+                    self?.delegate?.SearchResultViewControllerDidTappedItem(TitlePreviewViewModel(title: titleName, youtubeView: String(videoId), titleOverview: title.overview ?? ""))
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+      
+    }
     
 }

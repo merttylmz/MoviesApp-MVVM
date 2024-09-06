@@ -10,7 +10,7 @@ import SnapKit
 
 class HeroHeadUIView: UIView {
     
-    
+    lazy var heroImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,18 +22,21 @@ class HeroHeadUIView: UIView {
         fatalError()
     }
     
+    
+    // MARK: - HELPERS
     func setupImage(){
         
-        lazy var heroImageView = UIImageView()
+        
         heroImageView.image = UIImage(named: "heroImage")
+        heroImageView.contentMode = .scaleToFill
         addSubview(heroImageView)
 
         
         heroImageView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.height.equalTo(screenHeight*0.35)
+            make.height.equalTo(screenHeight * 0.5)
         }
         addGragiend()
     }
@@ -55,8 +58,9 @@ class HeroHeadUIView: UIView {
         playButton.layer.borderWidth = 1
         playButton.layer.cornerRadius = 6
         addSubview(playButton)
+        print(screenWidth,screenHeight)
         playButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(0.295 * screenHeight)
+            make.top.equalTo(heroImageView.snp.bottom).offset(-screenHeight * 0.0476)
             make.left.equalToSuperview().offset(0.2 * screenWidth)
             make.width.equalTo(screenWidth * 0.25)
         }
@@ -68,10 +72,17 @@ class HeroHeadUIView: UIView {
         downloadButton.layer.cornerRadius = 6
         addSubview(downloadButton)
         downloadButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(0.295 * screenHeight)
+            make.top.equalTo(heroImageView.snp.bottom).offset(-screenHeight * 0.0476)
             make.right.equalToSuperview().offset(-0.2 * screenWidth)
             make.width.equalTo(screenWidth * 0.25)
 
         }
     }
+    public func configure(with model: TitleViewModel){
+        guard let url = URL(string: "https://image.tmdb.org/t/p/original/\(model.posterURL)") else {return}
+        
+        heroImageView.sd_setImage(with: url, completed: nil)
+        
+    }
+    
 }
