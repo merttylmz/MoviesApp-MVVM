@@ -28,7 +28,7 @@ class HeroHeadUIView: UIView {
         
         
         heroImageView.image = UIImage(named: "heroImage")
-        heroImageView.contentMode = .scaleToFill
+        heroImageView.contentMode = .scaleAspectFit
         addSubview(heroImageView)
 
         
@@ -58,7 +58,6 @@ class HeroHeadUIView: UIView {
         playButton.layer.borderWidth = 1
         playButton.layer.cornerRadius = 6
         addSubview(playButton)
-        print(screenWidth,screenHeight)
         playButton.snp.makeConstraints { make in
             make.top.equalTo(heroImageView.snp.bottom).offset(-screenHeight * 0.0476)
             make.left.equalToSuperview().offset(0.2 * screenWidth)
